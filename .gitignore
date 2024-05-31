@@ -1,0 +1,87 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+logs
+*.log
+logs/*
+
+# Environment files
+.env
+.env.test
+.env.production
+.env.local
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Optional REPL history
+.node_repl_history
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Build directories
+dist/
+build/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Optional eslint and prettier configuration files
+.eslintcache
+.prettierignore
+
+# Yarn Integrity
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# Ignore exports and imports directory
+exports/
+imports/
+
+# Ignore public assets
+public/assets/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Xcode project files
+BioWallet.xcodeproj/
+Bio-Wallet.xcodeproj/
+
+~/sui-overflow/Bio-Wallet/BioWallet.xcodeproj/
