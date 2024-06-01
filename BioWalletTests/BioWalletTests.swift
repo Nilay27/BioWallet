@@ -1,8 +1,14 @@
 //
 //  BioWalletTests.swift
+<<<<<<< HEAD
 //  BioWalletTests
 //
 //  Created by Kumar Nilay on 01/06/24.
+=======
+//  Bio-WalletTests
+//
+//  Created by Kumar Nilay on 29/05/24.
+>>>>>>> old-history
 //
 
 import XCTest

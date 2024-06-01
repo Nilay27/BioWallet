@@ -1,6 +1,10 @@
 {
   "images" : [
     {
+<<<<<<< HEAD
+=======
+      "filename" : "4ca67f6e-1b1e-4e1e-a1eb-24db5beefd8f 1.png",
+>>>>>>> old-history
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -21,6 +25,10 @@
       "size" : "32x32"
     },
     {
+<<<<<<< HEAD
+=======
+      "filename" : "Bio_Wallet 1.png",
+>>>>>>> old-history
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
@@ -46,11 +54,19 @@
       "size" : "256x256"
     },
     {
+<<<<<<< HEAD
+=======
+      "filename" : "Bio_Wallet 3.png",
+>>>>>>> old-history
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
+<<<<<<< HEAD
+=======
+      "filename" : "4ca67f6e-1b1e-4e1e-a1eb-24db5beefd8f.png",
+>>>>>>> old-history
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"
