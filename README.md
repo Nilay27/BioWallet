@@ -39,6 +39,48 @@
 
 Feel free to copy this markdown into your README file.
 
+## Integrations for SUI-OverFlow
+1. [BlockEden](#blockeden)
+
+### BlockEden
+We leverage **BlockEden's Versatile API** to effectively transform our Mobile Phones into **Hardware Wallets**, this can happen because of support for versatile signatue schemes by SUI and BlockEden.
+
+Following are the features of our use! 
+
+**Moreover, everything is in SWIFT 😉**
+
+- **Versatile Use of BlockEdenAPI in Swift**: Using BlockEdenAPI in Swift, despite the lack of an SDK.
+  ```swift
+  if let blockEdenKey = ProcessInfo.processInfo.environment["blockEdenApiKey"] {
+      let blockEdenConnection = BlockEdenConnection(blockEdenKey: blockEdenKey)
+      suiProvider = SuiProvider(connection: blockEdenConnection)
+  }
+  ```
+
+- **Custom Connection Protocol**: Defined a custom connection protocol for BlockEden.
+  ```swift
+  public struct BlockEdenConnection: ConnectionProtocol {
+      public var fullNode: String
+      public var faucet: String
+      public var graphql: String? = nil
+
+      public init(blockEdenKey: String) {
+          self.fullNode = "https://api.blockeden.xyz/sui/devnet/" + blockEdenKey
+          self.faucet = "https://api.blockeden.xyz/sui/devnet/" + blockEdenKey
+      }
+  }
+  ```
+
+- **Transaction with SECP256R1 Signatures**: Performing transactions using SECP256R1 signatures instead of the native ED25519.
+
+- **Balance Fetching and Coin Checking**: Fetching balances and checking all coins of an address.
+
+- **Dry Running Transactions**: Performing dry run transactions to ensure correctness before execution.
+
+- **Novel Signature Scheme**: Implementing a novel signature scheme to transform mobile/laptops into hardware wallets.
+
+- **Multichain Support**: Supporting multichain calls to enhance app functionality.
+
 ## Table of Contents
 
 - [Installation](#installation)

@@ -335,6 +335,16 @@
 import SwiftUI
 import SuiKit
 
+public struct BlockEdenConnection: ConnectionProtocol {
+    public var fullNode: String
+    public var faucet: String
+    public var graphql: String? = nil
+
+    public init(blockEdenKey: String) {
+        self.fullNode = "https://api.blockeden.xyz/sui/devnet/" + blockEdenKey
+        self.faucet = "https://api.blockeden.xyz/sui/devnet/" + blockEdenKey
+    }
+}
 
 struct ContentView: View {
     @State private var isSignedIn: Bool = false
@@ -346,7 +356,7 @@ struct ContentView: View {
         VStack {
             if let bioWalletSigner = bioWalletSigner {
                 if isSignedIn {
-                    WalletView(isSignedIn: $isSignedIn,  username: $username, bioWalletSigner: bioWalletSigner)
+                    WalletView(isSignedIn: $isSignedIn, username: $username, bioWalletSigner: bioWalletSigner)
                         .transition(.move(edge: .bottom))
                 } else {
                     SignInView(isSignedIn: $isSignedIn, username: $username, bioWalletSigner: bioWalletSigner)
@@ -355,6 +365,13 @@ struct ContentView: View {
             } else {
                 Text("Loading...")
                     .onAppear {
+                        if let blockEdenKey = ProcessInfo.processInfo.environment["blockEdenApiKey"] {
+                            let blockEdenConnection = BlockEdenConnection(blockEdenKey: blockEdenKey)
+                            print("blockEdenConnection", blockEdenConnection)
+                            suiProvider = SuiProvider(connection: blockEdenConnection)
+                        } else {
+                            print("not using BlockEdenAPI")
+                        }
                         bioWalletSigner = BioWalletSigner(provider: suiProvider)
                     }
             }
@@ -362,4 +379,3 @@ struct ContentView: View {
         .animation(.easeInOut, value: isSignedIn)
     }
 }
-
