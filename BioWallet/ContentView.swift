@@ -1,6 +1,5 @@
 //import SwiftUI
 //import LocalAuthentication
-//import SuiKit
 //import Blake2
 //
 //struct ContentView: View {
@@ -334,6 +333,8 @@
 ////    }
 ////}
 import SwiftUI
+import SuiKit
+
 
 struct ContentView: View {
     @State private var isSignedIn: Bool = false
