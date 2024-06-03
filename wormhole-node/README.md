@@ -15,7 +15,7 @@ This repository contains the `wormhole-node`, a local Node.js server that facili
   - [Integration with BioWallet](#integration-with-biowallet)
     - [Swift SDK Functions](#swift-sdk-functions)
       - [`signAndExecuteBridgeTransaction`](#signandexecutebridgetransaction)
-    - [`buildBridgeTransaction`](#buildbridgetransaction)
+      - [`buildBridgeTransaction`](#buildbridgetransaction)
     - [Usage in Swift](#usage-in-swift)
 
 ## Installation
@@ -122,7 +122,7 @@ public func signAndExecuteBridgeTransaction(recipientChain: String, senderAddres
 }
 ```
 
-### `buildBridgeTransaction`
+#### `buildBridgeTransaction`
 
 This function calls the `wormhole-node` server to get the transaction data which is then signed and executed.
 
