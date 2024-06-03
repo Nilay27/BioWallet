@@ -15,9 +15,8 @@ struct TagToPublicKeyMap {
 }
 
 struct SerializedTransaction: Decodable {
-    let transactionBlock: String
+    let transactionBlock: [UInt8]
 }
-
 
 class BioWalletSigner {
     private let secureEnclaveManager: SecureEnclaveManager
@@ -171,7 +170,29 @@ class BioWalletSigner {
         print("set current Public Key")
     }
     
-    func wormWholeTxBlock(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> TransactionBlock? {
+    public func signAndExecuteBridgeTransaction(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> SuiTransactionBlockResponse{
+        guard let transactionBlockBytes = try await self.buildBridgeTransaction(recipientChain: recipientChain, senderAddress: senderAddress, receiverAddress: receiverAddress, amountToSend: amountToSend) else {
+            throw NSError(domain: "Failed to build bridgeTransaction", code: -1)
+        }
+        let transactionBlockWithIntent = RawSigner.messageWithIntent(.TransactionData, transactionBlockBytes)
+        let blake2bDigest = try Blake2b.hash(size: 32, data: transactionBlockWithIntent)
+        
+        // Use SecureEnclaveManager to sign the transaction block
+        let signature = try await self.signDataAsync(data: blake2bDigest)
+    
+        // start signature serialization
+        guard let publicKey = p256PublicKey?.key.compressedRepresentation else {
+            print("Public key is not available")
+            throw NSError(domain: "Public key is not available", code: -1)
+        }
+        let correctSignature = try self.getCorrectSignatureType(signature: signature, publicKey: publicKey)
+        let serializedSignature = try RawSigner.toSerializedSignature(correctSignature, .secp256r1, publicKey.base64EncodedString())
+        
+        return try await self.provider.executeTransactionBlock(transactionBlock: transactionBlockBytes.base64EncodedString(), signature: serializedSignature)
+       // Now you have the transaction data, you can return it or proceed with signing
+    }
+    
+    func buildBridgeTransaction(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> Data? {
         let urlString = "http://localhost:3000/prepareTransactionBlock"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
@@ -197,7 +218,6 @@ class BioWalletSigner {
         
         let (data, response) = try await URLSession.shared.data(for: request)
         print("data", data)
-        print("response", response)
 
         
         guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
@@ -207,34 +227,18 @@ class BioWalletSigner {
         
            // Decode the JSON data into SerializedTransaction
         do {
-                let serializedTransaction = try JSONDecoder().decode(SerializedTransaction.self, from: data)
-               print("Received serialized transaction block: \(serializedTransaction.transactionBlock)")
-                
-            // Convert the JSON string back to Data
-                guard let transactionData = serializedTransaction.transactionBlock.data(using: .utf8) else {
-                    print("Failed to convert transaction block string to Data")
-                    return nil
-                }
-                
-                // Initialize TransactionBlockDataBuilder with the Data
-                if let transactionBlockDataBuilder = TransactionBlockDataBuilder(bytes: transactionData) {
-                    print("Successfully created TransactionBlockDataBuilder")
-                    do {
-                        let transactionBlock = try TransactionBlock(transactionBlockDataBuilder)
-                        print("Successfully created TransactionBlock")
-                        return transactionBlock
-                    } catch {
-                        print("Failed to create TransactionBlock: \(error)")
-                        return nil
-                    }
-                } else {
-                    print("Failed to create TransactionBlockDataBuilder from transactionData")
-                    return nil
-                }
-            } catch {
-                print("Error decoding the transaction block: \(error)")
-                return nil
-            }
+               let serializedTransaction = try JSONDecoder().decode(SerializedTransaction.self, from: data)
+               print("Received serialized transaction block")
+
+               // Convert the array of UInt8 to Data
+               let transactionBlockBytes = Data(serializedTransaction.transactionBlock)
+            
+              
+               return transactionBlockBytes
+           } catch {
+               print("Error decoding the transaction block: \(error)")
+               return nil
+           }
     }
 }
 

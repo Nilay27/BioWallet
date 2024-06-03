@@ -235,7 +235,7 @@ struct WalletView: View {
                        self.showAlert = true
                    }
                }
-//               var result = try await bioWalletSigner.wormWholeTxBlock(
+//               var result = try await bioWalletSigner.signAndExecuteBridgeTransaction(
 //                recipientChain: "Sui",
 //                senderAddress: "0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0",
 //                receiverAddress: "0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0",
