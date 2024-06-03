@@ -14,6 +14,10 @@ struct TagToPublicKeyMap {
     let publicKey: SECP256R1PublicKey
 }
 
+struct SerializedTransaction: Decodable {
+    let transactionBlock: String
+}
+
 
 class BioWalletSigner {
     private let secureEnclaveManager: SecureEnclaveManager
@@ -167,7 +171,7 @@ class BioWalletSigner {
         print("set current Public Key")
     }
     
-    func wormWholeTxBlock(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> Data? {
+    func wormWholeTxBlock(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> TransactionBlock? {
         let urlString = "http://localhost:3000/prepareTransactionBlock"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
@@ -202,27 +206,35 @@ class BioWalletSigner {
         }
         
            // Decode the JSON data into SerializedTransaction
-           do {
-               let jsonResponse = try JSONSerialization.jsonObject(with: data, options: [])
-//               print("JSON Response:", jsonResponse)
-               
-               let transactionResponse = jsonResponse as? [String: Any]
-               let transactionData = try JSONSerialization.data(withJSONObject: transactionResponse?["transactionBlock"] ?? [:], options: [])
-//               print("transactionData", transactionData)
-               var blockData: Data
-               if let transactionBlockDataBuilder = TransactionBlockDataBuilder(bytes: transactionData) {
-                   // Use the transactionBlockDataBuilder as needed
-                   print("Successfully created TransactionBlockDataBuilder")
-                   blockData = try transactionBlockDataBuilder.build();
-               } else {
-                   print("Failed to create TransactionBlockDataBuilder from transactionData")
-                   return nil
-               }
-               return blockData
-           } catch {
-               print("Error decoding the transaction block: \(error)")
-               return nil
-           }
+        do {
+                let serializedTransaction = try JSONDecoder().decode(SerializedTransaction.self, from: data)
+               print("Received serialized transaction block: \(serializedTransaction.transactionBlock)")
+                
+            // Convert the JSON string back to Data
+                guard let transactionData = serializedTransaction.transactionBlock.data(using: .utf8) else {
+                    print("Failed to convert transaction block string to Data")
+                    return nil
+                }
+                
+                // Initialize TransactionBlockDataBuilder with the Data
+                if let transactionBlockDataBuilder = TransactionBlockDataBuilder(bytes: transactionData) {
+                    print("Successfully created TransactionBlockDataBuilder")
+                    do {
+                        let transactionBlock = try TransactionBlock(transactionBlockDataBuilder)
+                        print("Successfully created TransactionBlock")
+                        return transactionBlock
+                    } catch {
+                        print("Failed to create TransactionBlock: \(error)")
+                        return nil
+                    }
+                } else {
+                    print("Failed to create TransactionBlockDataBuilder from transactionData")
+                    return nil
+                }
+            } catch {
+                print("Error decoding the transaction block: \(error)")
+                return nil
+            }
     }
 }
 
