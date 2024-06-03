@@ -26,7 +26,7 @@ To set up the `wormhole-node`, follow these steps:
     ```sh
     npm install
     ```
-    ```
+
 2. Start the server:
     ```sh
     tsc && node dist/index.js    
