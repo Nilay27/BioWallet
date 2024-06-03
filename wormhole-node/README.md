@@ -128,8 +128,53 @@ This function calls the `wormhole-node` server to get the transaction data which
 
 ```swift
 func buildBridgeTransaction(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> Data? {
-    // Implementation to call the node server and get transaction data
-}
+        let urlString = "http://localhost:3000/prepareTransactionBlock"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return nil
+        }
+
+        let payload: [String: Any] = [
+            "recipientChain": recipientChain,
+            "senderAddress": senderAddress,
+            "receiverAddress": receiverAddress,
+            "amountToSend": amountToSend
+        ]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
+            print("Error: cannot create JSON from payload")
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        print("data", data)
+
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            print("Error: Invalid HTTP response")
+            return nil
+        }
+        
+           // Decode the JSON data into SerializedTransaction
+        do {
+               let serializedTransaction = try JSONDecoder().decode(SerializedTransaction.self, from: data)
+               print("Received serialized transaction block")
+
+               // Convert the array of UInt8 to Data
+               let transactionBlockBytes = Data(serializedTransaction.transactionBlock)
+            
+              
+               return transactionBlockBytes
+           } catch {
+               print("Error decoding the transaction block: \(error)")
+               return nil
+           }
+    }
 ```
 
 ### Usage in Swift
