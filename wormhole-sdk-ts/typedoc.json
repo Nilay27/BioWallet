@@ -1,0 +1,25 @@
+{
+  "name": "Wormhole TS SDK",
+  "extends": ["./typedoc.base.json"],
+  "entryPointStrategy": "packages" ,
+  "entryPoints": [
+    "core/base",
+    "core/definitions",
+    "connect",
+    "platforms/evm",
+    "platforms/evm/protocols/core",
+    "platforms/evm/protocols/tokenBridge",
+    "platforms/evm/protocols/cctp",
+    "platforms/solana",
+    "platforms/solana/protocols/core",
+    "platforms/solana/protocols/tokenBridge",
+    "platforms/cosmwasm",
+    "platforms/cosmwasm/protocols/core",
+    "platforms/cosmwasm/protocols/tokenBridge",
+    "platforms/cosmwasm/protocols/ibc",
+    "platforms/algorand",
+    "platforms/algorand/protocols/core",
+    "platforms/algorand/protocols/tokenBridge",
+    "sdk"
+  ]
+}

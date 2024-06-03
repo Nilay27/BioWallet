@@ -1,0 +1,47 @@
+{
+  "name": "@wormhole-foundation/sdk-token-registry",
+  "version": "0.3.0",
+  
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wormhole-foundation/connect-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wormhole-foundation/connect-sdk/issues"
+  },
+  "homepage": "https://github.com/wormhole-foundation/connect-sdk#readme",
+  "directories": {
+    "test": "__tests__"
+  },
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist/esm"
+  ],
+  "scripts": {
+    "test": "jest --config ../jest.config.ts __tests__/*.ts",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json  && echo '{\"type\":\"commonjs\"}' > dist/cjs/package.json",
+    "build": "tsc -p ./tsconfig.esm.json",
+    "rebuild": "npm run clean && npm run build",
+    "clean": "rm -rf ./dist && rm -rf ./.turbo",
+    "lint": "npm run prettier && eslint --fix ./src --ext .ts",
+    "prettier": "prettier --write ./src",
+    "importConnect": "tsx src/scripts/importConnect.ts",
+    "automatics": "npx ts-node ./src/scripts/updateAutomaticRegisteredTokens",
+    "updateForeignAssets": "npx ts-node ./src/scripts/updateForeignAssetConfig"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "@wormhole-foundation/sdk-connect": "^0.3.0",
+    "@wormhole-foundation/sdk-evm": "^0.3.0",
+    "@wormhole-foundation/sdk-evm-core": "^0.3.0",
+    "@wormhole-foundation/sdk-evm-tokenbridge": "^0.3.0",
+    "@wormhole-foundation/sdk-solana": "^0.3.0",
+    "@wormhole-foundation/sdk-solana-core": "^0.3.0",
+    "@wormhole-foundation/sdk-solana-tokenbridge": "^0.3.0",
+    "@wormhole-foundation/sdk-cosmwasm": "^0.3.0",
+    "@wormhole-foundation/sdk-cosmwasm-core": "^0.3.0",
+    "@wormhole-foundation/sdk-cosmwasm-tokenbridge": "^0.3.0"
+  }
+}
