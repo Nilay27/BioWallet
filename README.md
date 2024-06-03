@@ -16,11 +16,11 @@
 - **Hardware Wallet Transformation**: BioWallet securely stores your private key in the Secure Enclave of your device, transforming it into a hardware wallet. 
   - This eliminates the hassle of managing seed phrases and significantly reduces the risk of compromising your private key.
 - **SUI Network Integration**: Built on the SUI network, leveraging its robust signature flexibility and support for Secp256R1 signature curve.
+- **Multichain Support** : Using wormhole SDK to facilitate seamless cross-chain transactions directly from our Mobile Phones, transforming them into *Cross-Chain Hardware Wallets*. 
 - **Secure Transactions**: Sign and perform transactions securely with biometric authentication using secure enclave.
 - **Enhanced Security**: No more seed phrases; private keys never leave the device, ensuring top-notch security.
 - **Passkey Backup**: Seamlessly interact with the wallet across your devices utilizing passkeys.
 - **User-Friendly Interface**: Intuitive and easy-to-use interface with essential features.
-- **Upcoming WebAuthn based SDK**: 
 
 
 ### Upcoming Features
@@ -37,7 +37,6 @@
   - **MPC Based Recovery**: In case the device does not support passkeys/ the passkeys were deleted.
     - Multi-Party Computation (MPC) based recovery ensures you can regain access to your wallet even if you lose your device (upcoming feature).
 
-Feel free to copy this markdown into your README file.
 
 ## Integrations for SUI-OverFlow
 1. [Wormhole (Multichain-Track)](#wormhole-multichain-track)
