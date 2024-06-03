@@ -40,7 +40,105 @@
 Feel free to copy this markdown into your README file.
 
 ## Integrations for SUI-OverFlow
-1. [BlockEden](#blockeden)
+1. [Wormhole (Multichain-Track)](#wormhole-multichain-track)
+2. [BlockEden](#blockeden)
+
+### Wormhole (Multichain-Track)
+We leverage **Wormhole's Cross-Chain Protocol** to facilitate seamless cross-chain transactions directly from our Mobile Phones, transforming them into **Cross-Chain Hardware Wallets**. This integration harnesses the power of the Wormhole SDK to support versatile signature schemes and enable cross-chain functionality.
+
+Following are the features of our integration:
+
+- **Using Wormhole SDK in Swift**: Interacting with the Wormhole SDK in Swift for cross-chain transactions, even though the SDK is primarily in TypeScript.
+  ```swift
+  func buildBridgeTransaction(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> Data? {
+        let urlString = "http://localhost:3000/prepareTransactionBlock"
+        guard let url = URL(string: urlString) else {
+            return nil
+        }
+        let payload: [String: Any] = [
+            "recipientChain": recipientChain,
+            "senderAddress": senderAddress,
+            "receiverAddress": receiverAddress,
+            "amountToSend": amountToSend
+        ]
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
+            return nil
+        }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            return nil
+        }
+        do {
+            let serializedTransaction = try JSONDecoder().decode(SerializedTransaction.self, from: data)
+            let transactionBlockBytes = Data(serializedTransaction.transactionBlock)
+            return transactionBlockBytes
+           } catch {
+               print("Error decoding the transaction block: \(error)")
+               return nil
+        }
+    }
+  ```
+
+- **Custom Node Server for Wormhole SDK**: Setting up a local Node.js server to interact with the Wormhole SDK and handle cross-chain transactions.
+  ```javascript
+  app.post('/prepareTransactionBlock', async (req, res) => {
+    const { recipientChain, senderAddress, receiverAddress, amountToSend } = req.body;
+    const wh = await wormhole("Mainnet", [evm, sui]);
+    const ctx = wh.getChain("Sui");  
+    ctx.config.rpc = "https://fullnode.mainnet.sui.io:443/";
+    const rcv = wh.getChain(recipientChain as Chain);
+    const sndTb = await ctx.getTokenBridge();    
+    const sender: UniversalOrNative<"Sui"> = new UniversalAddress(senderAddress);
+    const recipient: ChainAddress<Chain> = {
+        chain: recipientChain as Chain,
+        address: new UniversalAddress(receiverAddress)
+    };
+    const transfer = sndTb.transfer(
+        sender,
+        recipient,
+        "native",
+        amount.units(amount.parse(amountToSend, ctx.config.nativeTokenDecimals)),
+    );
+    const tx = await transfer.next();
+    const suiClient = await ctx.getRpc()
+    if (tx.done) {
+        res.status(500).json({ error: 'No transaction was created' });
+    } else {
+        tx.value.transaction.setSenderIfNotSet(senderAddress)
+        const serializedTransaction = await tx.value.transaction.build({client: suiClient})
+        const serializedTransactionArray = Array.from(serializedTransaction);
+        res.json({ transactionBlock: serializedTransactionArray });
+        }   
+    }); 
+  ```
+
+- **Cross-Chain Transactions**: Facilitating cross-chain token transfers directly from Swift by communicating with the Node.js server that utilizes the Wormhole SDK.
+
+- **Secure Signature Handling**: Using Secure Enclave for signing transactions, ensuring high security for cross-chain operations.
+
+- **Transaction Preparation and Processing**: Preparing and processing transactions through the Node.js server, then signing and executing them in Swift.
+  ```swift
+   public func signAndExecuteBridgeTransaction(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> SuiTransactionBlockResponse{
+        guard let transactionBlockBytes = try await self.buildBridgeTransaction(recipientChain: recipientChain, senderAddress: senderAddress, receiverAddress: receiverAddress, amountToSend: amountToSend) else {
+            throw NSError(domain: "Failed to build bridgeTransaction", code: -1)
+        }
+        let transactionBlockWithIntent = RawSigner.messageWithIntent(.TransactionData, transactionBlockBytes)
+        let blake2bDigest = try Blake2b.hash(size: 32, data: transactionBlockWithIntent)
+        
+        let signature = try await self.signDataAsync(data: blake2bDigest) // Use SecureEnclaveManager to sign the transaction block
+    
+        // rest of the code
+        return try await self.provider.executeTransactionBlock(transactionBlock: transactionBlockBytes.base64EncodedString(), signature: serializedSignature)
+    }
+  ```
+
+- **Multichain Support**: Enabling multichain calls and interactions to enhance the application's functionality across different blockchain networks.
+
 
 ### BlockEden
 We leverage **BlockEden's Versatile API** to effectively transform our Mobile Phones into **Hardware Wallets**, this can happen because of support for versatile signatue schemes by SUI and BlockEden.
