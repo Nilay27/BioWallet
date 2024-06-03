@@ -14,6 +14,7 @@ struct TagToPublicKeyMap {
     let publicKey: SECP256R1PublicKey
 }
 
+
 class BioWalletSigner {
     private let secureEnclaveManager: SecureEnclaveManager
     public var provider: SuiProvider
@@ -164,6 +165,64 @@ class BioWalletSigner {
         self.tag = tagToPubKey.tag
         self.p256PublicKey = tagToPubKey.publicKey
         print("set current Public Key")
+    }
+    
+    func wormWholeTxBlock(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> Data? {
+        let urlString = "http://localhost:3000/prepareTransactionBlock"
+        guard let url = URL(string: urlString) else {
+            print("Invalid URL")
+            return nil
+        }
+
+        let payload: [String: Any] = [
+            "recipientChain": recipientChain,
+            "senderAddress": senderAddress,
+            "receiverAddress": receiverAddress,
+            "amountToSend": amountToSend
+        ]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: payload, options: []) else {
+            print("Error: cannot create JSON from payload")
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        print("data", data)
+        print("response", response)
+
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            print("Error: Invalid HTTP response")
+            return nil
+        }
+        
+           // Decode the JSON data into SerializedTransaction
+           do {
+               let jsonResponse = try JSONSerialization.jsonObject(with: data, options: [])
+//               print("JSON Response:", jsonResponse)
+               
+               let transactionResponse = jsonResponse as? [String: Any]
+               let transactionData = try JSONSerialization.data(withJSONObject: transactionResponse?["transactionBlock"] ?? [:], options: [])
+//               print("transactionData", transactionData)
+               var blockData: Data
+               if let transactionBlockDataBuilder = TransactionBlockDataBuilder(bytes: transactionData) {
+                   // Use the transactionBlockDataBuilder as needed
+                   print("Successfully created TransactionBlockDataBuilder")
+                   blockData = try transactionBlockDataBuilder.build();
+               } else {
+                   print("Failed to create TransactionBlockDataBuilder from transactionData")
+                   return nil
+               }
+               return blockData
+           } catch {
+               print("Error decoding the transaction block: \(error)")
+               return nil
+           }
     }
 }
 
