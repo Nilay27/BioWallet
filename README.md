@@ -197,8 +197,8 @@ Following are the features of our use!
 1. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/yourusername/biowallet.git
-    cd biowallet
+    git clone https://github.com/Nilay27/BioWallet.git
+    cd BioWallet
     ```
 
 2. **Open in Xcode**
