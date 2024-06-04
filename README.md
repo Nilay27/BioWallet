@@ -41,6 +41,7 @@
 ## Integrations for SUI-OverFlow
 1. [Wormhole (Multichain-Track)](#wormhole-multichain-track)
 2. [BlockEden](#blockeden)
+3. [BlockVision](#blockvision)
 
 ### Wormhole (Multichain-Track)
 We leverage **Wormhole's Cross-Chain Protocol** to facilitate seamless cross-chain transactions directly from our Mobile Phones, transforming them into **Cross-Chain Hardware Wallets**. This integration harnesses the power of the Wormhole SDK to support versatile signature schemes and enable cross-chain functionality.
