@@ -176,7 +176,8 @@ class BioWalletSigner {
         }
         let transactionBlockWithIntent = RawSigner.messageWithIntent(.TransactionData, transactionBlockBytes)
         let blake2bDigest = try Blake2b.hash(size: 32, data: transactionBlockWithIntent)
-        
+        print("KeyTag for signing", self.tag)
+        print("final data to be signed in bridging", [UInt8](blake2bDigest))
         // Use SecureEnclaveManager to sign the transaction block
         let signature = try await self.signDataAsync(data: blake2bDigest)
     

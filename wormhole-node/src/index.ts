@@ -16,9 +16,9 @@ app.post('/prepareTransactionBlock', async (req, res) => {
     console.log("req.body", req.body)
     
     // Initialize the Wormhole SDK
-    const wh = await wormhole("Mainnet", [evm, sui]);
+    const wh = await wormhole("Testnet", [evm, sui]);
     const ctx = wh.getChain("Sui");  
-    ctx.config.rpc = "https://fullnode.mainnet.sui.io:443/";
+    ctx.config.rpc = "https://fullnode.testnet.sui.io:443/";
     console.log("ctx", ctx)
   
 
@@ -56,6 +56,16 @@ app.post('/prepareTransactionBlock', async (req, res) => {
         const serializedTransactionArray = Array.from(serializedTransaction);
         res.json({ transactionBlock: serializedTransactionArray });
     }
+
+    // const txids: TxHash[] = [];
+    // const sampleTxn: string = "6D22xuBNm6raJ8kcU1PEdpcH2s8FfZZVaGa7dhLUMhFY"
+    // txids.push(sampleTxn)
+    // console.log("Txids", txids)
+    // const txs = txids.map((txid) => ({ chain: ctx.chain, txid }));
+    // console.log("txs", txs)
+    // // Get the wormhole message id from the transaction
+    // const [whm] = await ctx.parseTransaction(txs[txs.length - 1]!.txid);
+    // console.log("Wormhole Messages: ", whm);
 });
 
 app.listen(PORT, () => {
@@ -110,15 +120,9 @@ app.listen(PORT, () => {
 
   
   
-})("Sui", "0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0","0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0");
+})("Sui", "0xa396d3c411b9b00156f9fc20bfd7dc13c3106b1cc7f3b012263a3756757de37b","0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0");
 
- const txids: TxHash[] = [];
-    const sampleTxn: string = "BaottCYaxHXnxKQzXsvd1tStqfX8tXAD9EMWyLdBqmdK"
-    txids.push(sampleTxn)
-    console.log("Txids", txids)
-    const txs = txids.map((txid) => ({ chain: ctx.chain, txid }));
-    console.log("txs", txs)
-    // Get the wormhole message id from the transaction
-    const [whm] = await ctx.parseTransaction(txs[txs.length - 1]!.txid);
-    console.log("Wormhole Messages: ", whm);
+ 
+
+
  */

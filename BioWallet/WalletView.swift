@@ -26,7 +26,7 @@ struct WalletView: View {
     @State private var keyTag: String = ""
     @State private var p256PublicKey: SECP256R1PublicKey? = nil
     @State private var suiFundingAccount: Account? = nil
-    @State private var suiProvider: SuiProvider = SuiProvider(connection: DevnetConnection())
+    @State private var suiProvider: SuiProvider = SuiProvider(connection: TestnetConnection())
     @State private var isLoading: Bool = false
     @State private var transactionResult: String = ""
     @State private var transactionStatus: TransactionStatus = .none
@@ -240,13 +240,13 @@ struct WalletView: View {
                        self.showAlert = true
                    }
                }
-//               var result = try await bioWalletSigner.signAndExecuteBridgeTransaction(
-//                recipientChain: "Sui",
-//                senderAddress: "0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0",
-//                receiverAddress: "0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0",
-//                amountToSend: "0.1"
-//            )
-//               print("result", result)
+               var result = try await bioWalletSigner.signAndExecuteBridgeTransaction(
+                recipientChain: "Sui",
+                senderAddress: "0x2adaf24d07daed02130b0dbbb4474f1c7c01474c5e91c3d29259fddd3b0a13db",
+                receiverAddress: "0xa396d3c411b9b00156f9fc20bfd7dc13c3106b1cc7f3b012263a3756757de37b",
+                amountToSend: "0.01"
+            )
+               print("result", result)
            } catch {
                print("Failed to sign data: \(error)")
                DispatchQueue.main.async {
@@ -283,6 +283,7 @@ struct WalletView: View {
             print("entered prefunding acocunt")
             let currentBalance = try await fetchBalance()
             print("currentBalance", currentBalance)
+            print("providerConnection", suiProvider.connection)
             if currentBalance != "0.00 SUI" {
                 print("Account already funded with balance: \(currentBalance)")
                 return
@@ -334,7 +335,7 @@ struct WalletView_Previews: PreviewProvider {
     @State static var isSignedIn = true
     @State static var username = "qwerty"
     static var previews: some View {
-        let suiProvider = SuiProvider(connection: DevnetConnection())
+        let suiProvider = SuiProvider(connection: TestnetConnection())
         let bioWalletSigner = BioWalletSigner(provider: suiProvider)
         WalletView(isSignedIn: $isSignedIn, username: $username, bioWalletSigner: bioWalletSigner)
     }
