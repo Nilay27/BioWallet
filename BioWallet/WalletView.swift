@@ -217,6 +217,11 @@ struct WalletView: View {
                try txb.transferObject(objects: [coin], address: account.address())
                try txb.setSenderIfNotSet(sender: usersWalletAddress)
                let dryRunRes = try await bioWalletSigner.dryRunTransactionBlock(&txb)
+               var txPage = "https://suivision.xyz/txblock/"
+               var accountPage = "https://suivision.xyz/account/"
+
+               var cointPage = "https://suivision.xyz/coin/"
+               var objectPage = "https://suivision.xyz/object/"
                
                if let error = dryRunRes.effects?.status.error {
                    print("dryRunRes Error:", error)

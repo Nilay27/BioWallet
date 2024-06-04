@@ -1,7 +1,7 @@
 // index.ts
 import express from 'express';
 import bodyParser from 'body-parser';
-import { wormhole, Chain, UniversalOrNative, UniversalAddress, ChainAddress, amount } from "@wormhole-foundation/sdk";
+import { wormhole, Chain, UniversalOrNative, UniversalAddress, ChainAddress, amount, TxHash } from "@wormhole-foundation/sdk";
 import evm from "@wormhole-foundation/sdk/evm";
 import sui from "@wormhole-foundation/sdk/sui";
 
@@ -112,4 +112,13 @@ app.listen(PORT, () => {
   
 })("Sui", "0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0","0xb40f32bd1068afa2e47de0512d3d57d1233ca1670b1154afc3fc3b102515a8c0");
 
+ const txids: TxHash[] = [];
+    const sampleTxn: string = "BaottCYaxHXnxKQzXsvd1tStqfX8tXAD9EMWyLdBqmdK"
+    txids.push(sampleTxn)
+    console.log("Txids", txids)
+    const txs = txids.map((txid) => ({ chain: ctx.chain, txid }));
+    console.log("txs", txs)
+    // Get the wormhole message id from the transaction
+    const [whm] = await ctx.parseTransaction(txs[txs.length - 1]!.txid);
+    console.log("Wormhole Messages: ", whm);
  */

@@ -178,6 +178,27 @@ Following are the features of our use!
 
 - **Multichain Support**: Supporting multichain calls to enhance app functionality.
 
+### BlockVision
+We leverage BlockVision's powerful blockchain API and data service to transform mobile phones into secure hardware wallets for the Sui blockchain.
+
+- **Seamless BlockVision Integration:** Utilize BlockVision's high-availability indexing network for efficient data retrieval and complex query execution.
+
+- **Swift Integration:** Integrate BlockVision's capabilities directly within your Swift codebase.
+
+ - **Balance and Coin Management:** Effortlessly fetch account balances and retrieve information for all associated coins.
+
+We also integrate the following SuiVision api into our apps:
+
+- Account Page: View account details. (e.g., https://suivision.xyz/account/{accountaddress})
+- Transaction Page: Explore transaction details. (e.g., https://suivision.xyz/txblock/{txndigest})
+- Coin Page: Access information for specific coins. (e.g., https://suivision.xyz/coin/{cointype})
+- NFT Collection Page: Manage and explore NFT collections. (e.g., https://suivision.xyz/nft/collection/{collectiontype})
+- NFT Page: View details for individual NFTs. (e.g., https://suivision.xyz/nft/object/{objectid})
+- Object Page: Access information for any object on the Sui blockchain. (e.g., https://suivision.xyz/object/{objectid})
+
+
+
+
 ## Table of Contents
 
 - [Installation](#installation)
