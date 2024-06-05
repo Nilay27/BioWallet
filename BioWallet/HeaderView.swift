@@ -54,7 +54,7 @@ struct AccountInfoView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            AccountsHeaderView()
+            AccountsHeaderView(username: username)
             AccountDetailsView(address: address, onRefresh: onRefresh)
             BalanceView(balance: balance)
         }
@@ -66,12 +66,14 @@ struct AccountInfoView: View {
 }
 
 struct AccountsHeaderView: View {
+    var username: String
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text("Accounts")
-                .font(.headline)
+            Text("\(username)")
+                .font(.title2)
                 .padding(.top)
                 .foregroundColor(.black)
+                .fontWeight(.bold)
             Text("CURRENT")
                 .font(.subheadline)
                 .foregroundColor(.gray)

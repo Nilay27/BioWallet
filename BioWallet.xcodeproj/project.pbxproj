@@ -16,6 +16,7 @@
 		A11B28032C0B10CD00AD41D1 /* BioWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B28022C0B10CD00AD41D1 /* BioWalletUITestsLaunchTests.swift */; };
 		A1841B2E2C0B9C7C007AA5E5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A1841B2D2C0B9C7C007AA5E5 /* README.md */; };
 		A1841B302C10367D007AA5E5 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1841B2F2C10367D007AA5E5 /* FooterView.swift */; };
+		A1841B322C104F57007AA5E5 /* WormHoleTestnetMessage.png in Resources */ = {isa = PBXBuildFile; fileRef = A1841B312C104F57007AA5E5 /* WormHoleTestnetMessage.png */; };
 		A192AE362C0B28D900EB7798 /* SuiKit in Frameworks */ = {isa = PBXBuildFile; productRef = A192AE352C0B28D900EB7798 /* SuiKit */; };
 		A1CC412C2C0B2815000737AF /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CC41262C0B2815000737AF /* SignInView.swift */; };
 		A1CC412D2C0B2815000737AF /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CC41272C0B2815000737AF /* HeaderView.swift */; };
@@ -56,6 +57,7 @@
 		A11B28022C0B10CD00AD41D1 /* BioWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A1841B2D2C0B9C7C007AA5E5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		A1841B2F2C10367D007AA5E5 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
+		A1841B312C104F57007AA5E5 /* WormHoleTestnetMessage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = WormHoleTestnetMessage.png; sourceTree = "<group>"; };
 		A1CC41262C0B2815000737AF /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		A1CC41272C0B2815000737AF /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		A1CC41282C0B2815000737AF /* Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 		A11B27D82C0B10CB00AD41D1 = {
 			isa = PBXGroup;
 			children = (
+				A1841B312C104F57007AA5E5 /* WormHoleTestnetMessage.png */,
 				A1841B2D2C0B9C7C007AA5E5 /* README.md */,
 				A11B27E32C0B10CB00AD41D1 /* BioWallet */,
 				A11B27F52C0B10CD00AD41D1 /* BioWalletTests */,
@@ -275,6 +278,7 @@
 			files = (
 				A1841B2E2C0B9C7C007AA5E5 /* README.md in Resources */,
 				A11B27ED2C0B10CD00AD41D1 /* Preview Assets.xcassets in Resources */,
+				A1841B322C104F57007AA5E5 /* WormHoleTestnetMessage.png in Resources */,
 				A11B27E92C0B10CD00AD41D1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
