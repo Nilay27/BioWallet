@@ -34,119 +34,122 @@ struct WalletView: View {
     var bioWalletSigner: BioWalletSigner
     
     var body: some View {
-            GeometryReader { geometry in
-                VStack(spacing: 20) {
-                    HeaderView(username: username, address: usersWalletAddress, balance: balance, onRefresh: {
-                        Task {
-                            try await fetchBalance()
-                        }
-                    })
-                    if isLoading {
-                        ProgressView("Prefunding Account...")
-                            .foregroundColor(.white)
-                            .padding()
-                    }
-                    TextField("SUI Wallet Address", text: $walletAddress)
-                        .padding()
-                        .background(Color.black)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding([.leading, .trailing])
-                    
-                    TextField("Amount (max limit:\(balance))", text: $amount)
-                        .padding()
-                        .background(Color.black)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                        .textFieldStyle(PlainTextFieldStyle())
-                        .padding([.leading, .trailing])
-                    
-                    Button(action: {
-                        Task {
-                            await signBioWalletTxn()
-                        }
-                    }) {
-                        Text("Sign Transactions")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.gray)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding([.leading, .trailing])
-                    }
-                    .disabled(keyTag.isEmpty)
-                    
-                    Button(action: {
-                        isSignedIn = false
-                    }) {
-                        Text("Sign Out")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .padding([.leading, .trailing])
-                    }
-                    
-                    if transactionStatus == .success {
-                        VStack {
-                            Text("Transaction Successful:")
-                            Link("Show in explorer", destination: URL(string: transactionResult)!)
-                                .font(.title3)
-                        }
-                        .padding()
-                        .transition(.slide)
-                    }
-                    FooterView()
-                }
-                .frame(width: geometry.size.width, height: geometry.size.height)
-                .background(Color.black.opacity(0.8))
-                .onAppear {
-                    Task {
-                        await initFundingAccount()
-                        fetchPublicKeyFromUserDefaults()
-                    }
-                }
-                .overlay(
-                    Group {
-                        if showAlert {
-                            VStack {
-                                Image(systemName: transactionStatus == .success ? "checkmark.circle" : "xmark.circle")
-                                    .resizable()
-                                    .frame(width: 50, height: 50)
-                                    .foregroundColor(transactionStatus == .success ? .green : .red)
-                                Text(transactionStatus == .success ? "Transaction Successful" : "Transaction Failed")
-                                    .font(.largeTitle)
-                                    .padding()
-                                    .foregroundColor(.black)
-                                if transactionStatus == .failure {
-                                    Text(transactionResult)
-                                        .padding()
-                                        .multilineTextAlignment(.center)
-                                        .foregroundColor(Color.red)
-                                }
-                                Button(action: {
-                                    showAlert = false
-                                }) {
-                                    Text("OK")
-                                        .font(.title2)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(10)
-                                }
-                            }
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 10)
-                            .transition(.opacity)
-                        }
-                    }
-                )
-            }
-        }
+        Text("Network View")
+    }
+//    var body: some View {
+//            GeometryReader { geometry in
+//                VStack(spacing: 20) {
+//                    HeaderView(username: username, address: usersWalletAddress, balance: balance, onRefresh: {
+//                        Task {
+//                            try await fetchBalance()
+//                        }
+//                    })
+//                    if isLoading {
+//                        ProgressView("Prefunding Account...")
+//                            .foregroundColor(.white)
+//                            .padding()
+//                    }
+//                    TextField("SUI Wallet Address", text: $walletAddress)
+//                        .padding()
+//                        .background(Color.black)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                        .textFieldStyle(PlainTextFieldStyle())
+//                        .padding([.leading, .trailing])
+//                    
+//                    TextField("Amount (max limit:\(balance))", text: $amount)
+//                        .padding()
+//                        .background(Color.black)
+//                        .foregroundColor(.white)
+//                        .cornerRadius(10)
+//                        .textFieldStyle(PlainTextFieldStyle())
+//                        .padding([.leading, .trailing])
+//                    
+//                    Button(action: {
+//                        Task {
+//                            await signBioWalletTxn()
+//                        }
+//                    }) {
+//                        Text("Sign Transactions")
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.gray)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                            .padding([.leading, .trailing])
+//                    }
+//                    .disabled(keyTag.isEmpty)
+//                    
+//                    Button(action: {
+//                        isSignedIn = false
+//                    }) {
+//                        Text("Sign Out")
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.red)
+//                            .foregroundColor(.white)
+//                            .cornerRadius(10)
+//                            .padding([.leading, .trailing])
+//                    }
+//                    
+//                    if transactionStatus == .success {
+//                        VStack {
+//                            Text("Transaction Successful:")
+//                            Link("Show in explorer", destination: URL(string: transactionResult)!)
+//                                .font(.title3)
+//                        }
+//                        .padding()
+//                        .transition(.slide)
+//                    }
+//                    FooterView()
+//                }
+//                .frame(width: geometry.size.width, height: geometry.size.height)
+//                .background(Color.black.opacity(0.8))
+//                .onAppear {
+//                    Task {
+//                        await initFundingAccount()
+//                        fetchPublicKeyFromUserDefaults()
+//                    }
+//                }
+//                .overlay(
+//                    Group {
+//                        if showAlert {
+//                            VStack {
+//                                Image(systemName: transactionStatus == .success ? "checkmark.circle" : "xmark.circle")
+//                                    .resizable()
+//                                    .frame(width: 50, height: 50)
+//                                    .foregroundColor(transactionStatus == .success ? .green : .red)
+//                                Text(transactionStatus == .success ? "Transaction Successful" : "Transaction Failed")
+//                                    .font(.largeTitle)
+//                                    .padding()
+//                                    .foregroundColor(.black)
+//                                if transactionStatus == .failure {
+//                                    Text(transactionResult)
+//                                        .padding()
+//                                        .multilineTextAlignment(.center)
+//                                        .foregroundColor(Color.red)
+//                                }
+//                                Button(action: {
+//                                    showAlert = false
+//                                }) {
+//                                    Text("OK")
+//                                        .font(.title2)
+//                                        .padding()
+//                                        .background(Color.blue)
+//                                        .foregroundColor(.white)
+//                                        .cornerRadius(10)
+//                                }
+//                            }
+//                            .padding()
+//                            .background(Color.white)
+//                            .cornerRadius(10)
+//                            .shadow(radius: 10)
+//                            .transition(.opacity)
+//                        }
+//                    }
+//                )
+//            }
+//        }
 
 
     func fetchPublicKeyFromUserDefaults() {
