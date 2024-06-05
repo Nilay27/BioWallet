@@ -20,8 +20,8 @@ struct HeaderView: View {
                     .padding([.leading, .trailing], 10)
                     .shadow(color: .blue, radius: 10)
             }
-            Spacer()
         }
+        .padding(.bottom)
         .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), Color.blue.opacity(0.3)]), startPoint: .top, endPoint: .bottom))
         .cornerRadius(12)
     }

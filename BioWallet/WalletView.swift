@@ -334,7 +334,7 @@ struct WalletView: View {
 
 struct WalletView_Previews: PreviewProvider {
     @State static var isSignedIn = true
-    @State static var username = "nilay"
+    @State static var username = "qwerty"
     static var previews: some View {
         let suiProvider = SuiProvider(connection: TestnetConnection())
         let bioWalletSigner = BioWalletSigner(provider: suiProvider)
