@@ -3,23 +3,28 @@
 ---
 <!DOCTYPE html>
 <html>
-<body>
+<body style="background-color: #1e1e1e; color: white; font-family: Arial, sans-serif;">
 
-<div style="display: flex; align-items: center;">
-  <img src="./BioWallet/Assets.xcassets/BioWalletLogo.imageset/Bio_Wallet 1.png" alt="BioWallet Logo" style="height: 200px; margin-right: 10px;">
-  <div style="display: flex; flex-direction: column; justify-content: center;">
-    <h1 style="font-size: 50px; margin: 0; line-height: 1;">BioWallet</h1>
-    <h3 style="margin: 0; font-size: 20px;">Your device is your hardware wallet, simple, secure and streamlined!</h3>
-  </div>
-</div>
-</div>
+<table style="border-collapse: collapse;>
+  <tr style="border:none;">
+    <td style="border:none;"><img src="./BioWallet/Assets.xcassets/BioWalletLogo.imageset/Bio_Wallet 1.png" alt="BioWallet Logo" style="height: 120px;"></td>
+    <td style="border:none;">
+      <h1 style="font-size: 100px; margin: 0; line-height: 1;">BioWallet</h1>
+      <h3 style="margin: 0; font-size: 20px;">Your device is your hardware wallet, simple, secure and streamlined!</h3>
+    </td>
+  </tr>
+</table>
 
 <div style="display: flex; justify-content: center; margin-top: 20px;">
-  <img src="BioWalletImage.png" alt="Mobile Image" style="max-width: 100%;">
+  <img src="BioWalletImage.png" alt="Mobile Image" style="max-width: 100%; border: 1px solid #fff;">
 </div>
+
+<h2>Demo Link</h2>
+<p><a href="https://link_to_demo" style="color: white;">Watch the Demo</a></p>
 
 </body>
 </html>
+
 
 
 
