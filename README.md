@@ -1,55 +1,26 @@
 
 
 ---
-
 <!DOCTYPE html>
 <html>
-<head>
-<style>
-  .header-container {
-    display: flex;
-    align-items: center;
-  }
-
-  .header-container img {
-    height: 200px; /* Adjust height as needed */
-    margin-right: 10px;
-  }
-
-  .header-container h1 {
-    font-size: 200px;
-    margin: 0;
-    line-height: 1
-  }
-
-  .header-container h3 {
-    font-size: 2em;
-    margin: 0;
-  }
-
-  .center-image {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-</style>
-</head>
 <body>
 
-<div class="header-container">
-  <img src="./BioWallet/Assets.xcassets/BioWalletLogo.imageset/Bio_Wallet%201.png" alt="BioWallet Logo" width=100 height=100>
-  <h1>BioWallet</h1>
+<div style="display: flex; align-items: center;">
+  <img src="./BioWallet/Assets.xcassets/BioWalletLogo.imageset/Bio_Wallet 1.png" alt="BioWallet Logo" style="height: 200px; margin-right: 10px;">
+  <div style="display: flex; flex-direction: column; justify-content: center;">
+    <h1 style="font-size: 50px; margin: 0; line-height: 1;">BioWallet</h1>
+    <h3 style="margin: 0; font-size: 20px;">Your device is your hardware wallet, simple, secure and streamlined!</h3>
+  </div>
 </div>
-<div>
-    <h3>Your device is your hardware wallet, simple, secure and streamlined!</h3>
 </div>
 
-<div class="center-image">
-  <img src="./BioWalletImage.png" alt="Mobile Image" style="max-width: 50%;">
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+  <img src="BioWalletImage.png" alt="Mobile Image" style="max-width: 100%;">
 </div>
 
 </body>
 </html>
+
 
 
 ## Demo Link
