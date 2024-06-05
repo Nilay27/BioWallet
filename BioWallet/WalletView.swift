@@ -98,6 +98,7 @@ struct WalletView: View {
                         .padding()
                         .transition(.slide)
                     }
+                    FooterView()
                 }
                 .frame(width: geometry.size.width, height: geometry.size.height)
                 .background(Color.black.opacity(0.8))
@@ -333,7 +334,7 @@ struct WalletView: View {
 
 struct WalletView_Previews: PreviewProvider {
     @State static var isSignedIn = true
-    @State static var username = "qwerty"
+    @State static var username = "nilay"
     static var previews: some View {
         let suiProvider = SuiProvider(connection: TestnetConnection())
         let bioWalletSigner = BioWalletSigner(provider: suiProvider)

@@ -14,7 +14,7 @@ struct SignInView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                HeaderView()
+                LogoView()
                 Spacer()
                 TextField("Enter Username", text: $enteredUsername)
                     .padding()

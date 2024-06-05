@@ -15,6 +15,7 @@
 		A11B28012C0B10CD00AD41D1 /* BioWalletUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B28002C0B10CD00AD41D1 /* BioWalletUITests.swift */; };
 		A11B28032C0B10CD00AD41D1 /* BioWalletUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B28022C0B10CD00AD41D1 /* BioWalletUITestsLaunchTests.swift */; };
 		A1841B2E2C0B9C7C007AA5E5 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A1841B2D2C0B9C7C007AA5E5 /* README.md */; };
+		A1841B302C10367D007AA5E5 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1841B2F2C10367D007AA5E5 /* FooterView.swift */; };
 		A192AE362C0B28D900EB7798 /* SuiKit in Frameworks */ = {isa = PBXBuildFile; productRef = A192AE352C0B28D900EB7798 /* SuiKit */; };
 		A1CC412C2C0B2815000737AF /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CC41262C0B2815000737AF /* SignInView.swift */; };
 		A1CC412D2C0B2815000737AF /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1CC41272C0B2815000737AF /* HeaderView.swift */; };
@@ -54,6 +55,7 @@
 		A11B28002C0B10CD00AD41D1 /* BioWalletUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioWalletUITests.swift; sourceTree = "<group>"; };
 		A11B28022C0B10CD00AD41D1 /* BioWalletUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BioWalletUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A1841B2D2C0B9C7C007AA5E5 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A1841B2F2C10367D007AA5E5 /* FooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		A1CC41262C0B2815000737AF /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		A1CC41272C0B2815000737AF /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		A1CC41282C0B2815000737AF /* Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				A11B27E82C0B10CD00AD41D1 /* Assets.xcassets */,
 				A11B27EA2C0B10CD00AD41D1 /* BioWallet.entitlements */,
 				A11B27EB2C0B10CD00AD41D1 /* Preview Content */,
+				A1841B2F2C10367D007AA5E5 /* FooterView.swift */,
 			);
 			path = BioWallet;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				A1CC412C2C0B2815000737AF /* SignInView.swift in Sources */,
 				A1CC412F2C0B2815000737AF /* SecureEnclaveManager.swift in Sources */,
 				A11B27E72C0B10CB00AD41D1 /* ContentView.swift in Sources */,
+				A1841B302C10367D007AA5E5 /* FooterView.swift in Sources */,
 				A1CC41312C0B2815000737AF /* BioWalletSigner.swift in Sources */,
 				A1CC41302C0B2815000737AF /* WalletView.swift in Sources */,
 				A1CC412E2C0B2815000737AF /* Navigation.swift in Sources */,
