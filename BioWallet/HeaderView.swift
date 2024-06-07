@@ -139,8 +139,11 @@ struct BalanceView: View {
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = BioWalletViewModel()
+        viewModel.balance = "1 SUI"
+        viewModel.username = "Nilay"
+        viewModel.usersWalletAddress = ""
         
-        HeaderView()
+        return HeaderView()
             .environmentObject(viewModel)
     }
 }

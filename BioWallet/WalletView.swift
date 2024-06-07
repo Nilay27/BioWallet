@@ -152,51 +152,6 @@ struct WalletView: View {
 //        }
 
 
-    func fetchPublicKeyFromUserDefaults() {
-        if let storedUserMap = UserDefaults.standard.dictionary(forKey: "userMap") as? [String: [String: String]],
-           let userInfo = storedUserMap[username],
-           var publicKeyHex = userInfo["publicKey"],
-            let tag = userInfo["tag"] {
-            if let p256PublicKey = try? SECP256R1PublicKey(value: publicKeyHex) {
-                DispatchQueue.main.async {
-                    self.p256PublicKey = p256PublicKey
-                    self.keyTag = tag
-                    print("keyTag", tag)
-                    guard let usersWalletAddress = try? p256PublicKey.toSuiAddress() else {
-                        return
-                    }
-                    self.usersWalletAddress = usersWalletAddress
-                    print("Set usersWalletAddress in state: \(usersWalletAddress)")
-                    bioWalletSigner.setNewPublicKey(tagToPubKey: TagToPublicKeyMap(tag: tag, publicKey: p256PublicKey))
-                }
-            } else {
-            }
-        } else {
-        }
-    }
-    
-    func fetchBalance() async throws -> String {
-        let object = try await suiProvider.getCoins(account: usersWalletAddress, coinType: "0x2::sui::SUI")
-        print("Fetched object:", object)
-        // Check if the data array is empty
-        guard !object.data.isEmpty else {
-            print("No coins found for the account")
-            balance = "0.00 SUI"
-            return balance
-        }
-        
-        if let microSuiBalanceString = object.data[0].balance as? String,
-           let microSuiBalance = Double(microSuiBalanceString) {
-            let suiBalance = microSuiBalance / 1_000_000_000.0
-            let formattedBalance = String(format: "%.3f", suiBalance)
-            balance = "\(formattedBalance) SUI"
-            return balance
-        } else {
-            balance = "0.000 SUI"
-            return balance
-        }
-    }
-    
     private func signBioWalletTxn() async {
            print("KeyTag", keyTag)
            guard !keyTag.isEmpty else {
