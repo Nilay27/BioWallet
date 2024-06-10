@@ -167,6 +167,34 @@ Following are the features of our integration:
 - **Multichain Support**: Enabling multichain calls and interactions to enhance the application's functionality across different blockchain networks.
 
 
+### FUD The PUG
+Successfully integrated **Fud the Pug** and added a new feature that enables users to transfer any kind of coin using BioWallet, leveraging the Secure Enclave for enhanced security. This allows for a seamless and secure transfer process for various cryptocurrencies.
+
+#### Highlights of the New Feature
+**Moreover, everything is in SWIFT 😉**
+
+- **Versatile Coin Transfer:** Using BioWallet, users can now transfer any type of coin securely.
+```swift
+struct Coin {
+    var id: String
+    var name: String
+    var balance: String
+    var logo: String
+    var decimal: Int
+}
+
+@Published var coins: [Coin] = [
+    Coin(id: "0x2::sui::SUI", name: "Sui", balance: "0 SUI", logo: "suiLogo", decimal: 9),
+    Coin(id: "0x244b03664411b3f6ac7b8d770ded1002024558658178cc4179e42c527e728849::fud::FUD", name: "FUD", balance: "0 FUD", logo: "fudLogo", decimal: 5)
+]
+```
+
+**Fud Txn via BioWallet for transfer of 1 FUD on Testnet:**
+![Image](./FudThePugTxn.png)
+
+**Link for Transaction : [Link](https://testnet.suivision.xyz/txblock/28yTJo6z4WBvXwhhSrr7zomKLpWHYFqmDg8kztzCxrx5?tab=Overview)**
+ - Notice the Signature Scheme which is Secp256r1, i.e the signature scheme of Secure Enclave -> [Link](https://testnet.suivision.xyz/txblock/28yTJo6z4WBvXwhhSrr7zomKLpWHYFqmDg8kztzCxrx5?tab=User+Signatures)
+  
 ### BlockEden
 We leverage **BlockEden's Versatile API** to effectively transform our Mobile Phones into **Hardware Wallets**, this can happen because of support for versatile signatue schemes by SUI and BlockEden.
 
