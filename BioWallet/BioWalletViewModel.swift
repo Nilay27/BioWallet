@@ -13,21 +13,25 @@ class BioWalletViewModel: ObservableObject {
     @Published var username: String = ""
     @Published var isSignedIn: Bool = false
     @Published var usersWalletAddress: String?
-    @Published var balance: String = "0.00 SUI"
     @Published var isLoading: Bool = false
-    
+    @Published var selectedCoin: Coin = Coin(id: "0x2::sui::SUI", name: "Sui", balance: "0 SUI", logo: "suiLogo", decimal: 9)
+    @Published var coins: [Coin] = [
+        Coin(id: "0x2::sui::SUI", name: "SUI", balance: "0 SUI", logo: "suiLogo", decimal: 9),
+        Coin(id: "0x244b03664411b3f6ac7b8d770ded1002024558658178cc4179e42c527e728849::fud::FUD", name: "FUD", balance: "0 FUD", logo: "fudLogo", decimal: 5)
+    ]
+
     let bioWalletSigner: BioWalletSigner
     let suiProvider: SuiProvider
     var suiFundingAccount: Account?
 
     init() {
-        self.suiProvider = SuiProvider(connection: DevnetConnection())
+        self.suiProvider = SuiProvider(connection: TestnetConnection())
         self.bioWalletSigner = BioWalletSigner(provider: suiProvider)
         Task {
             await initFundingAccount()
         }
     }
-    
+
     func signIn(username: String) {
         self.username = username
         self.isSignedIn = true
@@ -35,14 +39,13 @@ class BioWalletViewModel: ObservableObject {
             await fetchPublicKeyFromUserDefaults()
         }
     }
-    
+
     func signOut() {
         self.username = ""
         self.isSignedIn = false
         self.usersWalletAddress = nil
-        self.balance = "0.00 SUI"
     }
-    
+
     func fetchPublicKeyFromUserDefaults() async {
         if let storedUserMap = UserDefaults.standard.dictionary(forKey: "userMap") as? [String: [String: String]],
            let userInfo = storedUserMap[username],
@@ -52,52 +55,70 @@ class BioWalletViewModel: ObservableObject {
                 guard let usersWalletAddress = try? p256PublicKey.toSuiAddress() else {
                     return
                 }
-                self.usersWalletAddress = usersWalletAddress
-                self.bioWalletSigner.setNewPublicKey(tagToPubKey: TagToPublicKeyMap(tag: tag, publicKey: p256PublicKey))
-                await fetchBalance()
-                await prefundCreatedAccount()
+                DispatchQueue.main.async {
+                    self.usersWalletAddress = usersWalletAddress
+                    Task{
+                        await self.fetchBalance(coinType: "0x2::sui::SUI")
+                    }
+                    self.bioWalletSigner.setNewPublicKey(tagToPubKey: TagToPublicKeyMap(tag: tag, publicKey: p256PublicKey))
+                    Task{
+                        await self.prefundCreatedAccount()
+                    }
+                }
+                
             }
         }
     }
 
-    func fetchBalance() async {
-        guard let usersWalletAddress = usersWalletAddress else {
-            self.balance = "0.00 SUI"
+    func fetchBalance(coinType: String) async {
+        guard let coinIndex = self.coins.firstIndex(where: { $0.id == coinType }),
+              let usersWalletAddress = usersWalletAddress else {
+            DispatchQueue.main.async {
+                if let coinIndex = self.coins.firstIndex(where: { $0.id == coinType }) {
+                    self.coins[coinIndex].balance = "0.00 \(self.coins[coinIndex].name)"
+                }
+            }
             return
         }
         do {
-            let object = try await suiProvider.getCoins(account: usersWalletAddress, coinType: "0x2::sui::SUI")
+            let object = try await suiProvider.getCoins(account: usersWalletAddress, coinType: coinType)
+            print("object in fetchBalance", object.data.count)
             guard !object.data.isEmpty else {
-                self.balance = "0.00 SUI"
+                DispatchQueue.main.async {
+                    self.coins[coinIndex].balance = "0.00 \(self.coins[coinIndex].name)"
+                }
                 return
             }
             
-            if let microSuiBalanceString = object.data[0].balance as? String,
-               let microSuiBalance = Double(microSuiBalanceString) {
-                let suiBalance = microSuiBalance / 1_000_000_000.0
-                let formattedBalance = String(format: "%.3f", suiBalance)
-                self.balance = "\(formattedBalance) SUI"
-            } else {
-                self.balance = "0.000 SUI"
+            var totalBalance: Double = 0
+            for coin in object.data {
+                if let microBalanceString = coin.balance as? String,
+                   let microBalance = Double(microBalanceString) {
+                    totalBalance += microBalance
+                }
             }
+            let formattedTotalBalance = String(format: "%.3f", totalBalance / pow(10, self.coins[coinIndex].decimal))
+            print("totalBalance", formattedTotalBalance)
+                self.coins[coinIndex].balance = "\(formattedTotalBalance) \(self.coins[coinIndex].name)"
         } catch {
             print("Failed to fetch balance: \(error.localizedDescription)")
-            self.balance = "0.00 SUI"
+            DispatchQueue.main.async {
+                self.coins[coinIndex].balance = "0.00 \(self.coins[coinIndex].name)"
+            }
         }
     }
-    
+
+
     func initFundingAccount() async {
         do {
             let suiPrivateKey: String
 
-            // Assign the value inside the if let block
             if let privateKeyFromEnv = ProcessInfo.processInfo.environment["suiPrivateKey"] {
                 suiPrivateKey = privateKeyFromEnv
             } else {
                 throw NSError(domain: "EnvironmentVariableError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Private Key not found in environment variables."])
             }
 
-            // Use the variable after ensuring it has a value
             let privateKey = try ED25519PrivateKey(value: suiPrivateKey)
             suiFundingAccount = try Account(privateKey: privateKey, accountType: .ed25519)
             print("suiFundingAccount address", try suiFundingAccount?.address())
@@ -105,18 +126,34 @@ class BioWalletViewModel: ObservableObject {
             print("Error: \(error)")
         }
     }
-    
+
     func prefundCreatedAccount() async {
         do {
             print("entered prefunding account")
-            await fetchBalance()
-            let currentBalance = self.balance
-            print("currentBalance", currentBalance)
-            print("providerConnection", suiProvider.connection)
-            if currentBalance != "0.00 SUI" {
-                print("Account already funded with balance: \(currentBalance)")
-                return
+
+            guard let usersWalletAddress = usersWalletAddress else {
+                  print("wallet address not yet set")
+                  return
+              }
+              
+              let object = try await suiProvider.getCoins(account: usersWalletAddress, coinType: "0x2::sui::SUI")
+              print("object", object.data)
+            
+            var totalBalance: Double = 0
+            for coin in object.data {
+                if let microBalanceString = coin.balance as? String,
+                   let microBalance = Double(microBalanceString) {
+                    totalBalance += microBalance
+                }
             }
+
+            let formattedTotalBalance = String(format: "%.3f", totalBalance / 1e9)
+            print("totalBalance", formattedTotalBalance)
+            
+            if totalBalance > 0 {
+               print("Account already funded with balance: \(formattedTotalBalance) SUI")
+               return
+           }
             
             DispatchQueue.main.async {
                 self.isLoading = true
@@ -129,16 +166,13 @@ class BioWalletViewModel: ObservableObject {
                 throw NSError(domain: "Funding AccountError", code: -1)
             }
 
-            let object = try await suiProvider.getCoins(account: myAddress, coinType: "0x2::sui::SUI")
-            print("object", object.data[0].balance)
+            let fundingObject = try await suiProvider.getCoins(account: myAddress, coinType: "0x2::sui::SUI")
+            print("fundingObject", object.data[0].balance)
 
             var txb = try TransactionBlock()
             try txb.setSender(sender: myAddress)
             let coin = try txb.splitCoin(coin: txb.gas, amounts: [try txb.pure(value: .number(100_000_000))])
-            guard let usersWalletAddress = usersWalletAddress else{
-                print("wallet address not yet set")
-                return
-            }
+
             try txb.transferObject(objects: [coin], address: usersWalletAddress)
 
             guard let account = suiFundingAccount else {
@@ -153,8 +187,11 @@ class BioWalletViewModel: ObservableObject {
             
             DispatchQueue.main.async {
                 self.isLoading = false
+                Task{
+                    await self.fetchBalance(coinType: "0x2::sui::SUI")
+                }
+                
             }
-            await fetchBalance()
         } catch {
             print("Error: \(error)")
             DispatchQueue.main.async {
@@ -163,4 +200,3 @@ class BioWalletViewModel: ObservableObject {
         }
     }
 }
-

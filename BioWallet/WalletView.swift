@@ -239,48 +239,48 @@ struct WalletView: View {
     
     func prefundCreatedAccount() async {
         do {
-            print("entered prefunding acocunt")
-            let currentBalance = try await fetchBalance()
-            print("currentBalance", currentBalance)
-            print("providerConnection", suiProvider.connection)
-            if currentBalance != "0.00 SUI" {
-                print("Account already funded with balance: \(currentBalance)")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                isLoading = true
-            }
-
-            var myAddress: String
-            if let address = try suiFundingAccount?.address() {
-                myAddress = address
-            } else {
-                throw NSError(domain: "Funding AccountError", code: -1)
-            }
-
-            let object = try await suiProvider.getCoins(account: myAddress, coinType: "0x2::sui::SUI")
-            print("object", object.data[0].balance)
-
-            var txb = try TransactionBlock()
-            try txb.setSender(sender: myAddress)
-            let coin = try txb.splitCoin(coin: txb.gas, amounts: [try txb.pure(value: .number(100_000_000))])
-            try txb.transferObject(objects: [coin], address: usersWalletAddress)
-
-            guard let account = suiFundingAccount else {
-                throw NSError(domain: "Funding AccountError", code: -1)
-            }
-            let signer = RawSigner(account: account, provider: suiProvider)
-            let signedBlock = try await signer.signTransactionBlock(transactionBlock: &txb)
-            print("signedBlock bytes", signedBlock.transactionBlockBytes)
-            print("serializedSignature", signedBlock.signature)
-            let res = try await suiProvider.executeTransactionBlock(transactionBlock: signedBlock.transactionBlockBytes, signature: signedBlock.signature)
-            print("account Prefunded", res)
-            
-            DispatchQueue.main.async {
-                isLoading = false
-            }
-            try await fetchBalance()
+//            print("entered prefunding acocunt")
+////            let currentBalance = try await fetchBalance()
+//            print("currentBalance", currentBalance)
+//            print("providerConnection", suiProvider.connection)
+//            if currentBalance != "0.00 SUI" {
+//                print("Account already funded with balance: \(currentBalance)")
+//                return
+//            }
+//            
+//            DispatchQueue.main.async {
+//                isLoading = true
+//            }
+//
+//            var myAddress: String
+//            if let address = try suiFundingAccount?.address() {
+//                myAddress = address
+//            } else {
+//                throw NSError(domain: "Funding AccountError", code: -1)
+//            }
+//
+//            let object = try await suiProvider.getCoins(account: myAddress, coinType: "0x2::sui::SUI")
+//            print("object", object.data[0].balance)
+//
+//            var txb = try TransactionBlock()
+//            try txb.setSender(sender: myAddress)
+//            let coin = try txb.splitCoin(coin: txb.gas, amounts: [try txb.pure(value: .number(100_000_000))])
+//            try txb.transferObject(objects: [coin], address: usersWalletAddress)
+//
+//            guard let account = suiFundingAccount else {
+//                throw NSError(domain: "Funding AccountError", code: -1)
+//            }
+//            let signer = RawSigner(account: account, provider: suiProvider)
+//            let signedBlock = try await signer.signTransactionBlock(transactionBlock: &txb)
+//            print("signedBlock bytes", signedBlock.transactionBlockBytes)
+//            print("serializedSignature", signedBlock.signature)
+//            let res = try await suiProvider.executeTransactionBlock(transactionBlock: signedBlock.transactionBlockBytes, signature: signedBlock.signature)
+//            print("account Prefunded", res)
+//            
+//            DispatchQueue.main.async {
+//                isLoading = false
+//            }
+//            try await fetchBalance()
         } catch {
             print("Error: \(error)")
             DispatchQueue.main.async {

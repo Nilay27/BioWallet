@@ -7,15 +7,25 @@ struct HeaderView: View {
         VStack(alignment: .leading, spacing: 10) {
             LogoView()
             if !viewModel.username.isEmpty,
-               let address = viewModel.usersWalletAddress,
-               !viewModel.balance.isEmpty {
-                AccountInfoView(username: viewModel.username, address: address, balance: viewModel.balance, onRefresh: {
+               let address = viewModel.usersWalletAddress {
+                AccountInfoView(username: viewModel.username, address: address, balance: viewModel.selectedCoin.balance, onRefresh: {
                     Task {
-                        await viewModel.fetchBalance()
+                        await viewModel.fetchBalance(coinType: viewModel.selectedCoin.id)
                     }
                 })
                 .padding([.leading, .trailing], 10)
                 .shadow(color: .blue, radius: 10)
+            } else {
+                // Debug information
+                Text("Debug Info")
+                Text("Username: \(viewModel.username)")
+                if let address = viewModel.usersWalletAddress {
+                    Text("Address: \(address)")
+                } else {
+                    Text("Address: nil")
+                }
+                Text("Selected Coin: \(viewModel.selectedCoin.name)")
+                Text("Balance: \(viewModel.selectedCoin.balance)")
             }
         }
         .padding(.bottom)
@@ -24,7 +34,7 @@ struct HeaderView: View {
         .onAppear {
             if viewModel.isSignedIn {
                 Task {
-                    await viewModel.fetchBalance()
+                    await viewModel.fetchBalance(coinType: viewModel.selectedCoin.id)
                 }
             }
         }
@@ -127,23 +137,23 @@ struct BalanceView: View {
     var balance: String
 
     var body: some View {
+        if balance == "0 SUI"{
+            
+        }else{
         Text("Balance: \(balance)")
             .font(.title3)
             .padding(.leading)
             .foregroundColor(.black)
             .fontWeight(.bold)
             .opacity(0.5)
+        }
+        
     }
 }
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = BioWalletViewModel()
-        viewModel.balance = "1 SUI"
-        viewModel.username = "Nilay"
-        viewModel.usersWalletAddress = ""
-        
-        return HeaderView()
-            .environmentObject(viewModel)
+        HeaderView().environmentObject(viewModel)
     }
 }
