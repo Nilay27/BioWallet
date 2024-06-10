@@ -39,7 +39,7 @@ struct NetworkView: View {
                 ForEach(Network.allCases, id: \.self) { network in
                     HStack {
                         Text(network.rawValue)
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                             .font(.title3)
                             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                         Spacer()
@@ -62,6 +62,8 @@ struct NetworkView: View {
             .onAppear {
                 selectedNetwork = viewModel.selectedNetwork
             }
+            .background(Color.black)
+            .opacity(0.8)
         }
         .background(Color.black)
         .opacity(0.8)
