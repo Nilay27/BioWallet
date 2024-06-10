@@ -19,13 +19,14 @@ class BioWalletViewModel: ObservableObject {
         Coin(id: "0x2::sui::SUI", name: "SUI", balance: "0 SUI", logo: "suiLogo", decimal: 9),
         Coin(id: "0x244b03664411b3f6ac7b8d770ded1002024558658178cc4179e42c527e728849::fud::FUD", name: "FUD", balance: "0 FUD", logo: "fudLogo", decimal: 5)
     ]
-
-    let bioWalletSigner: BioWalletSigner
-    let suiProvider: SuiProvider
+    @Published var selectedNetwork: Network = .testnet
+    
+    var suiProvider: SuiProvider =  SuiProvider(connection: TestnetConnection())
+    var bioWalletSigner: BioWalletSigner
     var suiFundingAccount: Account?
 
+
     init() {
-        self.suiProvider = SuiProvider(connection: TestnetConnection())
         self.bioWalletSigner = BioWalletSigner(provider: suiProvider)
         Task {
             await initFundingAccount()
@@ -125,6 +126,14 @@ class BioWalletViewModel: ObservableObject {
         } catch {
             print("Error: \(error)")
         }
+    }
+    
+    func changeNetwork(to network: Network) {
+        selectedNetwork = network
+        suiProvider = SuiProvider(connection: network.connection)
+        bioWalletSigner = BioWalletSigner(provider: suiProvider)
+        print("Changed network to \(network.connection)")
+            // Handle additional logic for changing network
     }
 
     func prefundCreatedAccount() async {
