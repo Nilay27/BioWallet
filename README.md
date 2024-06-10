@@ -190,7 +190,7 @@ struct Coin {
 ```
 
 **Fud Txn via BioWallet for transfer of 1 FUD on Testnet:**
-![Image](./FudThePugTxn.png)
+<img src="./FudThePugTxn.png" alt="Fud The Pug Transaction" width="300"/>
 
 **Link for Transaction : [Link](https://testnet.suivision.xyz/txblock/28yTJo6z4WBvXwhhSrr7zomKLpWHYFqmDg8kztzCxrx5?tab=Overview)**
  - Notice the Signature Scheme which is Secp256r1, i.e the signature scheme of Secure Enclave -> [Link](https://testnet.suivision.xyz/txblock/28yTJo6z4WBvXwhhSrr7zomKLpWHYFqmDg8kztzCxrx5?tab=User+Signatures)
