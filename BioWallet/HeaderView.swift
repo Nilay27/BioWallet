@@ -1,29 +1,43 @@
 import SwiftUI
 
-#if os(macOS)
-import AppKit
-#else
-import UIKit
-#endif
-
 struct HeaderView: View {
-    var username: String?
-    var address: String?
-    var balance: String?
-    var onRefresh: (() -> Void)?
+    @EnvironmentObject var viewModel: BioWalletViewModel
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             LogoView()
-            if let username = username, let address = address, let balance = balance {
-                AccountInfoView(username: username, address: address, balance: balance, onRefresh: onRefresh)
-                    .padding([.leading, .trailing], 10)
-                    .shadow(color: .blue, radius: 10)
+            if !viewModel.username.isEmpty,
+               let address = viewModel.usersWalletAddress {
+                AccountInfoView(username: viewModel.username, address: address, balance: viewModel.selectedCoin.balance, onRefresh: {
+                    Task {
+                        await viewModel.fetchBalance(coinType: viewModel.selectedCoin.id)
+                    }
+                })
+                .padding([.leading, .trailing], 10)
+                .shadow(color: .blue, radius: 10)
+            } else {
+                // Debug information
+                Text("Debug Info")
+                Text("Username: \(viewModel.username)")
+                if let address = viewModel.usersWalletAddress {
+                    Text("Address: \(address)")
+                } else {
+                    Text("Address: nil")
+                }
+                Text("Selected Coin: \(viewModel.selectedCoin.name)")
+                Text("Balance: \(viewModel.selectedCoin.balance)")
             }
         }
         .padding(.bottom)
         .background(LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.3), Color.blue.opacity(0.3)]), startPoint: .top, endPoint: .bottom))
         .cornerRadius(12)
+        .onAppear {
+            if viewModel.isSignedIn {
+                Task {
+                    await viewModel.fetchBalance(coinType: viewModel.selectedCoin.id)
+                }
+            }
+        }
     }
 }
 
@@ -123,17 +137,23 @@ struct BalanceView: View {
     var balance: String
 
     var body: some View {
+        if balance == "0 SUI"{
+            
+        }else{
         Text("Balance: \(balance)")
             .font(.title3)
             .padding(.leading)
             .foregroundColor(.black)
             .fontWeight(.bold)
             .opacity(0.5)
+        }
+        
     }
 }
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(username: "testuser", address: "0x1234567890abcdef", balance: "1 SUI", onRefresh: {})
+        let viewModel = BioWalletViewModel()
+        HeaderView().environmentObject(viewModel)
     }
 }

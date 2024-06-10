@@ -9,72 +9,66 @@ import Foundation
 
 import SwiftUI
 
-/**
- Image(systemName: "dollarsign.circle")
-     .resizable()
-     .frame(width: 30, height: 30)
- */
 struct FooterView: View {
+    @Binding var selectedTab: Tab
+
     var body: some View {
-            HStack(spacing: 20) {
-                Spacer()
-                Button(action: {
-                    // Action for Send
-                }) {
-                    VStack {
-                        Image(systemName: "arrow.up.right")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    }
+        HStack {
+            Button(action: {
+                selectedTab = .transfer
+            }) {
+                VStack {
+                    Image(systemName: "dollarsign.circle")
+                        .font(.largeTitle)
+                    Text("Transfer")
+                        .font(.caption)
                 }
-                Spacer()
-                Button(action: {
-                    // Action for Swap
-                }) {
-                    VStack {
-                        Image(systemName: "arrow.right.arrow.left")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    }
-                }
-                Spacer()
-                Button(action: {
-                    // Action for Bridge
-                }) {
-                    VStack {
-                        Image(systemName: "arrow.triangle.swap")                             
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    }
-                }
-                Spacer()
-                Button(action: {
-                    // Action for Portfolio
-                }) {
-                    VStack {
-                        Image(systemName: "globe")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
-                    }
-                }
-                Spacer()
             }
-            .padding()
-            .background(Color.black)
-            .opacity(0.8)
+            Spacer()
+            Button(action: {
+                selectedTab = .swap
+            }) {
+                VStack {
+                    Image(systemName: "arrow.right.arrow.left.circle")
+                        .font(.largeTitle)
+                    Text("Swap")
+                        .font(.caption)
+                }
+            }
+            Spacer()
+            Button(action: {
+                selectedTab = .bridge
+            }) {
+                VStack {
+                    Image(systemName: "bolt.horizontal.circle")
+                        .font(.largeTitle)
+                    Text("Bridge")
+                        .font(.caption)
+                }
+            }
+            Spacer()
+            Button(action: {
+                selectedTab = .network
+            }) {
+                VStack {
+                    Image(systemName: "globe")
+                        .font(.largeTitle)
+                    Text("Network")
+                        .font(.caption)
+                }
+            }
         }
+        .padding()
+        .background(Color.blue)
+        .foregroundColor(.white)
+    }
 }
 
 struct FooterView_Previews: PreviewProvider {
     static var previews: some View {
-        FooterView()
+        FooterView(selectedTab: .constant(.transfer))
     }
 }
-
 /**
  var body: some View {
      HStack {
