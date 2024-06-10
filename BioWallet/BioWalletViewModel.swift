@@ -128,12 +128,22 @@ class BioWalletViewModel: ObservableObject {
         }
     }
     
-    func changeNetwork(to network: Network) {
+    func changeNetwork(to network: Network){
         selectedNetwork = network
         suiProvider = SuiProvider(connection: network.connection)
         bioWalletSigner = BioWalletSigner(provider: suiProvider)
         print("Changed network to \(network.connection)")
-            // Handle additional logic for changing network
+        if let storedUserMap = UserDefaults.standard.dictionary(forKey: "userMap") as? [String: [String: String]],
+           let userInfo = storedUserMap[username],
+           let publicKeyHex = userInfo["publicKey"],
+           let tag = userInfo["tag"] {
+            if let p256PublicKey = try? SECP256R1PublicKey(value: publicKeyHex) {
+                guard let usersWalletAddress = try? p256PublicKey.toSuiAddress() else {
+                    return
+                }
+                self.bioWalletSigner.setNewPublicKey(tagToPubKey: TagToPublicKeyMap(tag: tag, publicKey: p256PublicKey))
+            }
+        }
     }
 
     func prefundCreatedAccount() async {

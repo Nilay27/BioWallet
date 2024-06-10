@@ -240,7 +240,7 @@ struct TransferView: View {
                 print(res)
                 DispatchQueue.main.async {
                     self.transactionStatus = .success
-                    self.transactionResult = "https://suiscan.xyz/testnet/tx/\(res.digest)" // Set this to your actual transaction result link
+                    self.transactionResult = "https://suiscan.xyz/\(viewModel.selectedNetwork.rawValue.lowercased())/tx/\(res.digest)" // Set this to your actual transaction result link
                     self.showAlert = true
                 }
             }
