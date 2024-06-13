@@ -156,7 +156,7 @@ class BioWalletViewModel: ObservableObject {
               }
               
               let object = try await suiProvider.getCoins(account: usersWalletAddress, coinType: "0x2::sui::SUI")
-              print("object", object.data)
+              print("object", object)
             
             var totalBalance: Double = 0
             for coin in object.data {
@@ -186,7 +186,7 @@ class BioWalletViewModel: ObservableObject {
             }
 
             let fundingObject = try await suiProvider.getCoins(account: myAddress, coinType: "0x2::sui::SUI")
-            print("fundingObject", object.data[0].balance)
+            print("fundingObject", fundingObject)
 
             var txb = try TransactionBlock()
             try txb.setSender(sender: myAddress)

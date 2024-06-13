@@ -40,8 +40,61 @@ class BioWalletSigner {
         return address
     }
     
+    func getUID() async throws -> String{
+        let suiPrivateKey: String
+
+        if let privateKeyFromEnv = ProcessInfo.processInfo.environment["suiPrivateKey"] {
+            suiPrivateKey = privateKeyFromEnv
+        } else {
+            throw NSError(domain: "EnvironmentVariableError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Private Key not found in environment variables."])
+        }
+
+        let privateKey = try ED25519PrivateKey(value: suiPrivateKey)
+        let gasStation = try Account(privateKey: privateKey, accountType: .ed25519)
+        
+        // initiate txb and `moveCall` gerRandomUUID
+        var txb = try TransactionBlock()
+        try txb.setSender(sender: gasStation.address())
+        txb.setGasPrice(price: 1000)
+        txb.setGasBudget(price: 10000000) //1e7
+        try txb.moveCall(
+            target:"0x1cd0885b1e9ebfdbf7a60a50b504b7f1b7446a194610e8e020db99f42245286d::biowalletdb::getRandonUID",
+            arguments: [txb.object(id: "0x8").toTransactionArgument()]
+        )
+        let signer = RawSigner(account: gasStation, provider: self.provider)
+        let signedBlock = try await signer.signTransactionBlock(transactionBlock: &txb)
+        let options = SuiTransactionBlockResponseOptions(showEffects: true, showObjectChanges: true)
+        let res = try await self.provider.executeTransactionBlock(
+            transactionBlock: signedBlock.transactionBlockBytes,
+            signature: signedBlock.signature,
+            options: options
+        )
+        // Use guard to safely unwrap the optional objectId
+        guard let objectId = self.getObjectIdFromObjectChanges(res) else {
+            print("Created object not found in objectChanges")
+            return ""
+        }
+        print("objectId", objectId)
+        let objectOptions = SuiObjectDataOptions(showContent: true)
+        let objectReturned = try await self.provider.getObject(objectId: objectId, options: objectOptions)
+        // Use guard to safely unwrap the optional fields and uid
+        guard let content = objectReturned?.data?.content,
+              case .moveObject(let moveObject) = content,
+              let fields = moveObject.fields
+        else{
+            print("no content found")
+            return ""
+        }
+
+        let uidBytes = try fields["uid"].rawData()
+       
+        return uidBytes.base64EncodedString()
+    }
+    //Value of optional type '[SuiObjectChange]?' must be unwrapped to refer to member 'subscript' of wrapped base type '[SuiObjectChange]'
+    
     public func createWallet() async throws -> TagToPublicKeyMap {
-        let uniqueTag = UUID().uuidString
+        let uniqueTag = try await self.getUID()
+        print("uniqueTag", uniqueTag)
         let (_, _, compressedKey) = try await generateKeyPairAsync(manager: self.secureEnclaveManager, tag: uniqueTag)
         let p256PublicKey = try SECP256R1PublicKey(data: compressedKey)
         self.p256PublicKey = p256PublicKey
@@ -240,6 +293,25 @@ class BioWalletSigner {
                print("Error decoding the transaction block: \(error)")
                return nil
            }
+    }
+    
+    func getObjectIdFromObjectChanges(_ res: SuiTransactionBlockResponse) -> String? {
+        guard let objectChanges = res.objectChanges else {
+            return nil
+        }
+        
+        for change in objectChanges {
+            if case .created(let createdObject) = change {
+                return createdObject.objectId
+            }
+        }
+        
+        return nil
+    }
+    
+    // Function to convert bytes to hex
+    func bytesToHex(_ bytes: [UInt8]) -> String {
+        return bytes.map { String(format: "%02x", $0) }.joined()
     }
 }
 
