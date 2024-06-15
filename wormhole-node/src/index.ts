@@ -1,10 +1,8 @@
-// index.ts
 import express from 'express';
 import bodyParser from 'body-parser';
 import { wormhole, Chain, UniversalOrNative, UniversalAddress, ChainAddress, amount, TxHash } from "@wormhole-foundation/sdk";
 import evm from "@wormhole-foundation/sdk/evm";
 import sui from "@wormhole-foundation/sdk/sui";
-
 
 const app = express();
 const PORT = 3000;
@@ -58,19 +56,14 @@ app.post('/prepareTransactionBlock', async (req, res) => {
         }
 
     } catch (error) {
-        console.error("Error occurred:", error);
-        res.status(500).json({ error: error.message || 'An error occurred' });
+        if (error instanceof Error) {
+            console.error("Error occurred:", error);
+            res.status(500).json({ error: error.message });
+        } else {
+            console.error("Unknown error occurred:", error);
+            res.status(500).json({ error: 'An unknown error occurred' });
+        }
     }
-
-    // const txids: TxHash[] = [];
-    // const sampleTxn: string = "6D22xuBNm6raJ8kcU1PEdpcH2s8FfZZVaGa7dhLUMhFY"
-    // txids.push(sampleTxn)
-    // console.log("Txids", txids)
-    // const txs = txids.map((txid) => ({ chain: ctx.chain, txid }));
-    // console.log("txs", txs)
-    // // Get the wormhole message id from the transaction
-    // const [whm] = await ctx.parseTransaction(txs[txs.length - 1]!.txid);
-    // console.log("Wormhole Messages: ", whm);
 });
 
 app.listen(PORT, () => {
