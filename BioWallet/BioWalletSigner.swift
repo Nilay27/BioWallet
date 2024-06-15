@@ -239,7 +239,7 @@ class BioWalletSigner {
     }
     
     func buildBridgeTransaction(recipientChain: String, senderAddress: String, receiverAddress: String, amountToSend: String) async throws -> Data? {
-        let urlString = "http://localhost:3000/prepareTransactionBlock"
+        let urlString = "https://biowallet-production.up.railway.app:3000/prepareTransactionBlock"
         guard let url = URL(string: urlString) else {
             print("Invalid URL")
             return nil
