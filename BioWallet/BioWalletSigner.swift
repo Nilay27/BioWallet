@@ -58,37 +58,29 @@ class BioWalletSigner {
         txb.setGasPrice(price: 1000)
         txb.setGasBudget(price: 10000000) //1e7
         try txb.moveCall(
-            target:"0x1cd0885b1e9ebfdbf7a60a50b504b7f1b7446a194610e8e020db99f42245286d::biowalletdb::getRandonUID",
+            target:"0x80548cd80c32d1a68d37ae1dbdf78cfe039d05944d8d96cd422f722d0b533aac::biowalletdb::getRandonUID",
             arguments: [txb.object(id: "0x8").toTransactionArgument()]
         )
         let signer = RawSigner(account: gasStation, provider: self.provider)
         let signedBlock = try await signer.signTransactionBlock(transactionBlock: &txb)
-        let options = SuiTransactionBlockResponseOptions(showEffects: true, showObjectChanges: true)
+        let options = SuiTransactionBlockResponseOptions(showEffects: true, showEvents:true)
         let res = try await self.provider.executeTransactionBlock(
             transactionBlock: signedBlock.transactionBlockBytes,
             signature: signedBlock.signature,
             options: options
         )
-        // Use guard to safely unwrap the optional objectId
-        guard let objectId = self.getObjectIdFromObjectChanges(res) else {
-            print("Created object not found in objectChanges")
+        guard let eventEmitted = res.events else{
+            print("no event emitted")
             return ""
         }
-        print("objectId", objectId)
-        let objectOptions = SuiObjectDataOptions(showContent: true)
-        let objectReturned = try await self.provider.getObject(objectId: objectId, options: objectOptions)
-        // Use guard to safely unwrap the optional fields and uid
-        guard let content = objectReturned?.data?.content,
-              case .moveObject(let moveObject) = content,
-              let fields = moveObject.fields
-        else{
-            print("no content found")
+        print(eventEmitted[0].bcs)
+        
+        guard let uid = eventEmitted[0].bcs else{
+            print("bcs string not found")
             return ""
         }
-
-        let uidBytes = try fields["uid"].rawData()
        
-        return uidBytes.base64EncodedString()
+        return uid
     }
     //Value of optional type '[SuiObjectChange]?' must be unwrapped to refer to member 'subscript' of wrapped base type '[SuiObjectChange]'
     

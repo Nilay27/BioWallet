@@ -8,7 +8,7 @@ struct HeaderView: View {
             LogoView()
             if !viewModel.username.isEmpty,
                let address = viewModel.usersWalletAddress {
-                AccountInfoView(username: viewModel.username, address: address, balance: viewModel.selectedCoin.balance, onRefresh: {
+                AccountInfoView(username: viewModel.username, address: address, selectedCoin: viewModel.selectedCoin, onRefresh: {
                     Task {
                         await viewModel.fetchBalance(coinType: viewModel.selectedCoin.id)
                     }
@@ -63,14 +63,14 @@ struct LogoView: View {
 struct AccountInfoView: View {
     var username: String
     var address: String
-    var balance: String
+    @ObservedObject var selectedCoin: Coin
     var onRefresh: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             AccountsHeaderView(username: username)
             AccountDetailsView(address: address, onRefresh: onRefresh)
-            BalanceView(balance: balance)
+            BalanceView(balance: selectedCoin.balance)
         }
         .padding(.horizontal)
         .padding(.bottom)
@@ -78,6 +78,7 @@ struct AccountInfoView: View {
         .cornerRadius(12)
     }
 }
+
 
 struct AccountsHeaderView: View {
     var username: String

@@ -25,17 +25,17 @@ struct FooterView: View {
                 }
             }
             Spacer()
-            Button(action: {
-                selectedTab = .swap
-            }) {
-                VStack {
-                    Image(systemName: "arrow.right.arrow.left.circle")
-                        .font(.largeTitle)
-                    Text("Swap")
-                        .font(.caption)
-                }
-            }
-            Spacer()
+//            Button(action: {
+//                selectedTab = .swap
+//            }) {
+//                VStack {
+//                    Image(systemName: "arrow.right.arrow.left.circle")
+//                        .font(.largeTitle)
+//                    Text("Swap")
+//                        .font(.caption)
+//                }
+//            }
+//            Spacer()
             Button(action: {
                 selectedTab = .bridge
             }) {

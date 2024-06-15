@@ -10,10 +10,10 @@ import SwiftUI
 import SuiKit
 
 
-class Coin: Identifiable, Hashable {
+class Coin: Identifiable, Hashable, ObservableObject {
     let id: String
     let name: String
-    var balance: String
+    @Published var balance: String
     let logo: String
     let decimal: Double
 

@@ -51,6 +51,8 @@ struct DropdownMenu<Label: View, Content: View>: View {
                     isOpen.toggle()
                 }
             }
+            .background(Color.black)
+            .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
 
             if isOpen {
                 VStack(spacing: 0) { // Ensure no spacing between items
@@ -62,6 +64,8 @@ struct DropdownMenu<Label: View, Content: View>: View {
                         .padding(.top, 5)
                 }
                 .transition(.move(edge: .top))
+                .background(Color.black)
+
             }
         }
     }

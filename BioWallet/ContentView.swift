@@ -13,8 +13,8 @@ struct ContentView: View {
                 switch selectedTab {
                 case .transfer:
                     TransferView()
-                case .swap:
-                    SwapView()
+//                case .swap:
+//                    SwapView()
                 case .bridge:
                     BridgeView()
                 case .network:
@@ -33,7 +33,7 @@ struct ContentView: View {
 
 enum Tab {
     case transfer
-    case swap
+//    case swap
     case bridge
     case network
 }
