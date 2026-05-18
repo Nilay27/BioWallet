@@ -5,22 +5,47 @@
 <html>
 <body style="background-color: #1e1e1e; color: white; font-family: Arial, sans-serif;">
 
-<table style="border-collapse: collapse;>
+<table style="border-collapse: collapse;">
   <tr style="border:none;">
-    <td style="border:none;"><img src="./BioWallet/Assets.xcassets/BioWalletLogo.imageset/Bio_Wallet 1.png" alt="BioWallet Logo" style="height: 120px;"></td>
     <td style="border:none;">
+      <img src="./BioWallet/Assets.xcassets/BioWalletLogo.imageset/Bio_Wallet 1.png" alt="BioWallet Logo" style="height: 120px;">
+    </td>
+    <td style="border:none; padding-left: 20px;">
       <h1 style="font-size: 100px; margin: 0; line-height: 1;">BioWallet</h1>
-      <h3 style="margin: 0; font-size: 20px;">Your device is your hardware wallet, simple, secure and streamlined!</h3>
+      <h3 style="margin: 0; font-size: 20px;">Your device is your hardware wallet — simple, secure and streamlined.</h3>
     </td>
   </tr>
 </table>
 
+<p style="margin-top: 20px;">
+  <a href="https://blog.sui.io/2024-sui-overflow-hackathon-winners/#randomness" target="_blank" style="text-decoration: none;">
+    <span style="background-color: #6f4cff; color: white; padding: 8px 14px; border-radius: 999px; font-weight: bold;">
+      🏆 Sui Overflow 2024 Winner — 2nd Prize, Randomness Track
+    </span>
+  </a>
+</p>
+
+<p style="font-size: 18px; line-height: 1.5; max-width: 900px;">
+  BioWallet is a fingerprint-based wallet for the Sui ecosystem that uses custom randomness handling for secure database entry and recovery flows.
+</p>
+
+<h2>Winner Announcement</h2>
+<p>
+  <a href="https://blog.sui.io/2024-sui-overflow-hackathon-winners/#randomness" target="_blank" style="color: white;">
+    Sui Overflow 2024 Winners — Randomness Track
+  </a>
+</p>
+
 <div style="display: flex; justify-content: center; margin-top: 20px;">
-  <img src="BioWalletImage.png" alt="Mobile Image" style="max-width: 100%; border: 1px solid #fff;">
+  <img src="BioWalletImage.png" alt="BioWallet Mobile Preview" style="max-width: 100%; border: 1px solid #fff;">
 </div>
 
 <h2>Demo Link</h2>
-<p><a href="https://link_to_demo" style="color: white;">Watch the Demo</a></p>
+<p>
+  <a href="https://link_to_demo" style="color: white;">Watch the Demo</a>
+</p>
+
+
 
 </body>
 </html>
@@ -28,9 +53,6 @@
 
 
 
-## Demo Link
-
-[Watch the Demo](https://youtu.be/Ihawy_Cb5iI?si=dbHM6l5ECHXhdC5U)
 
 ## Features
 - **Hardware Wallet Transformation**: BioWallet securely stores your private key in the Secure Enclave of your device, transforming it into a hardware wallet. 
